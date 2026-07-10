@@ -10,3 +10,6 @@
                            |
                          Keycloack
 ```
+
+# *Немного о важном!*
+После выполнения команды `git clone https://github.com/H1S0K4-M0R0W/self-host.git` необходимо заполнить поля в файлах `env.example` и удалить окончание `*.example` -> `.env`
