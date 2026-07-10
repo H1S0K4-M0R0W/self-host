@@ -5,7 +5,7 @@ services:
     ports:
       - '80:80'   # HTTP
       - '443:443' # HTTPs (TLS/SSL)
-      - '81:81' # Admin Web Port
+      - ${IN_EXTERNAL_PORT}:${IN_EXTERNAL_PORT} # Admin Web Port
 
     environment:
       TZ: ${TIME_ZONE}
