@@ -1,4 +1,3 @@
-guacamole/.env
-nginx-proxy-manager/.env
-portainer.io/.env
+guacamole/.env.example
+nginx-proxy-manager/.env.example
 access-token.pem
