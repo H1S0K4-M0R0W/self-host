@@ -1,12 +1,17 @@
+networks:
+  npm_network:
+    driver: bridge
+
 services:
   npm:
     image: 'jc21/nginx-proxy-manager:2.15.1'
     restart: unless-stopped
+    networks:
+      - guacamole_network
     ports:
       - '80:80'   # HTTP
       - '443:443' # HTTPs (TLS/SSL)
       - ${IN_EXTERNAL_PORT}:${IN_EXTERNAL_PORT} # Admin Web Port
-
     environment:
       TZ: ${TIME_ZONE}
       # Postgres
@@ -15,8 +20,6 @@ services:
       DB_POSTGRES_NAME: ${DB_POSTGRES_NAME}
       DB_POSTGRES_USER: ${DB_POSTGRES_USER}
       DB_POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
-      
-
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
@@ -25,6 +28,8 @@ services:
 
   npm-postgres:
     image: postgres:17
+    networks:
+      - guacamole_network
     environment:
       POSTGRES_DB: ${DB_POSTGRES_NAME}
       POSTGRES_USER: ${DB_POSTGRES_USER}
