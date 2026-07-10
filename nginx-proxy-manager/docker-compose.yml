@@ -1,27 +1,34 @@
 services:
-  app:
+  npm:
     image: 'jc21/nginx-proxy-manager:2.15.1'
     restart: unless-stopped
-
     ports:
-      # These ports are in format <host-port>:<container-port>
-      - '80:80' # Public HTTP Port
-      - '443:443' # Public HTTPS Port
+      - '80:80'   # HTTP
+      - '443:443' # HTTPs (TLS/SSL)
       - '81:81' # Admin Web Port
-      # Add any other Stream port you want to expose
-      # - '21:21' # FTP
 
     environment:
-      TZ: "Europe/Moscow"
-      PUID: 1000
-      PGID: 1000		
-      # Uncomment this if you want to change the location of
-      # the SQLite DB file within the container
-      # DB_SQLITE_FILE: "/data/database.sqlite"
-
-      # Uncomment this if IPv6 is not enabled on your host
-      # DISABLE_IPV6: 'true'
+      TZ: ${TIME_ZONE}
+      # Postgres
+      DB_POSTGRES_HOST: ${DB_POSTGRES_HOST}
+      DB_POSTGRES_PORT: ${DB_POSTGRES_PORT}
+      DB_POSTGRES_NAME: ${DB_POSTGRES_NAME}
+      DB_POSTGRES_USER: ${DB_POSTGRES_USER}
+      DB_POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
+      
 
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
+    depends_on:
+      - npm-postgres
+
+  npm-postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${DB_POSTGRES_NAME}
+      POSTGRES_USER: ${DB_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${DB_POSTGRES_PASSWORD}
+      
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
